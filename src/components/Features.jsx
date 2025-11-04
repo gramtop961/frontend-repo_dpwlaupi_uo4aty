@@ -35,26 +35,42 @@ const features = [
   }
 ];
 
-const FeatureCard = ({ icon: Icon, title, desc }) => (
+const MotionCard = ({ children, delay = 0 }) => (
   <motion.div
-    initial={{ opacity: 0, y: 12 }}
+    initial={{ opacity: 0, y: 18 }}
     whileInView={{ opacity: 1, y: 0 }}
-    viewport={{ once: true, amount: 0.2 }}
-    transition={{ duration: 0.5 }}
-    className="group relative rounded-xl border border-white/10 bg-white/5 p-6 backdrop-blur hover:bg-white/10"
+    viewport={{ once: true, amount: 0.25 }}
+    transition={{ duration: 0.55, delay }}
   >
-    <div className="mb-4 inline-flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-tr from-violet-600/20 to-fuchsia-500/20 text-violet-300 ring-1 ring-inset ring-white/10">
-      <Icon className="h-5 w-5" />
-    </div>
-    <h3 className="mb-2 text-lg font-semibold text-white">{title}</h3>
-    <p className="text-slate-300">{desc}</p>
+    {children}
   </motion.div>
+);
+
+const FeatureCard = ({ icon: Icon, title, desc, i }) => (
+  <MotionCard delay={i * 0.05}>
+    <div className="group relative overflow-hidden rounded-2xl border border-white/10 bg-white/5 p-6 backdrop-blur-md transition-colors hover:bg-white/10">
+      <div className="absolute -right-10 -top-10 h-28 w-28 rounded-full bg-gradient-to-tr from-violet-600/20 to-fuchsia-500/20 blur-2xl transition-opacity group-hover:opacity-100" />
+      <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-tr from-violet-600/25 to-fuchsia-500/25 text-violet-200 ring-1 ring-inset ring-white/10">
+        <Icon className="h-6 w-6" />
+      </div>
+      <h3 className="mb-2 text-lg font-semibold text-white">{title}</h3>
+      <p className="text-slate-300">{desc}</p>
+      <motion.div
+        aria-hidden
+        initial={{ scaleX: 0 }}
+        whileInView={{ scaleX: 1 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.6, ease: 'easeOut' }}
+        className="mt-4 h-px origin-left bg-gradient-to-r from-violet-500/60 via-fuchsia-500/60 to-transparent"
+      />
+    </div>
+  </MotionCard>
 );
 
 const Features = () => {
   return (
-    <section id="features" className="relative bg-slate-950 py-20 text-white">
-      <div className="pointer-events-none absolute inset-0 opacity-60">
+    <section id="features" className="relative bg-slate-950 py-24 text-white">
+      <div className="pointer-events-none absolute inset-0 opacity-80">
         <div className="absolute left-10 top-10 h-40 w-40 rounded-full bg-[radial-gradient(circle_at_center,rgba(99,102,241,0.25),transparent_60%)] blur-2xl" />
         <div className="absolute bottom-10 right-10 h-48 w-48 rounded-full bg-[radial-gradient(circle_at_center,rgba(236,72,153,0.25),transparent_60%)] blur-2xl" />
       </div>
@@ -81,9 +97,9 @@ const Features = () => {
           </motion.p>
         </div>
 
-        <div className="mt-12 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {features.map((f) => (
-            <FeatureCard key={f.title} {...f} />
+        <div className="mt-14 grid grid-cols-1 gap-7 sm:grid-cols-2 lg:grid-cols-3">
+          {features.map((f, i) => (
+            <FeatureCard key={f.title} {...f} i={i} />
           ))}
         </div>
       </div>

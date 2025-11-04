@@ -45,21 +45,21 @@ const tiers = [
   },
 ];
 
-const PricingCard = ({ name, price, cadence, features, cta, highlighted }) => {
+const PricingCard = ({ name, price, cadence, features, cta, highlighted, i }) => {
   return (
     <motion.div
-      initial={{ opacity: 0, y: 16 }}
-      whileInView={{ opacity: 1, y: 0 }}
+      initial={{ opacity: 0, y: 20, scale: 0.98 }}
+      whileInView={{ opacity: 1, y: 0, scale: 1 }}
       viewport={{ once: true, amount: 0.2 }}
-      transition={{ duration: 0.5 }}
-      className={`relative flex flex-col rounded-2xl border p-6 backdrop-blur ${
+      transition={{ duration: 0.6, delay: i * 0.05 }}
+      className={`group relative flex flex-col overflow-hidden rounded-2xl border p-6 backdrop-blur-md transition-all ${
         highlighted
-          ? 'border-violet-500/40 bg-gradient-to-br from-violet-600/15 to-fuchsia-500/10 shadow-xl shadow-violet-900/30'
-          : 'border-white/10 bg-white/5'
+          ? 'border-violet-500/40 bg-gradient-to-br from-violet-600/15 to-fuchsia-500/10 shadow-2xl shadow-violet-800/30'
+          : 'border-white/10 bg-white/5 hover:bg-white/10'
       }`}
     >
       {highlighted && (
-        <span className="absolute -top-3 left-6 rounded-full bg-violet-600 px-3 py-1 text-xs font-medium text-white shadow">Popular</span>
+        <span className="absolute right-4 top-4 rounded-full bg-violet-600 px-3 py-1 text-xs font-medium text-white shadow">Popular</span>
       )}
       <h3 className="text-lg font-semibold text-white">{name}</h3>
       <div className="mt-4 flex items-baseline gap-2">
@@ -76,7 +76,7 @@ const PricingCard = ({ name, price, cadence, features, cta, highlighted }) => {
       </ul>
       <a
         href="#"
-        className={`mt-8 inline-flex items-center justify-center rounded-lg px-4 py-2 font-medium transition ${
+        className={`mt-8 inline-flex items-center justify-center rounded-xl px-4 py-2 font-medium transition ${
           highlighted
             ? 'bg-gradient-to-tr from-violet-600 to-fuchsia-500 text-white hover:brightness-110'
             : 'border border-white/10 bg-white/5 text-white hover:bg-white/10'
@@ -84,13 +84,25 @@ const PricingCard = ({ name, price, cadence, features, cta, highlighted }) => {
       >
         {cta}
       </a>
+
+      {/* Glow ring */}
+      <motion.div
+        aria-hidden
+        initial={{ opacity: 0 }}
+        whileHover={{ opacity: 1 }}
+        className="pointer-events-none absolute -inset-px rounded-2xl border border-violet-400/20"
+      />
     </motion.div>
   );
 };
 
 const Pricing = () => {
   return (
-    <section id="pricing" className="relative bg-slate-950 py-20 text-white">
+    <section id="pricing" className="relative bg-slate-950 py-24 text-white">
+      <div className="pointer-events-none absolute inset-0">
+        <div className="absolute left-1/2 top-0 h-60 w-[40rem] -translate-x-1/2 rounded-full bg-[radial-gradient(circle_at_center,rgba(124,58,237,0.18),transparent_60%)] blur-3xl" />
+      </div>
+
       <div className="mx-auto max-w-7xl px-6">
         <div className="mx-auto max-w-2xl text-center">
           <motion.h2
@@ -113,9 +125,9 @@ const Pricing = () => {
           </motion.p>
         </div>
 
-        <div className="mt-12 grid grid-cols-1 gap-6 md:grid-cols-3">
-          {tiers.map((t) => (
-            <PricingCard key={t.name} {...t} />
+        <div className="mt-14 grid grid-cols-1 gap-7 md:grid-cols-3">
+          {tiers.map((t, i) => (
+            <PricingCard key={t.name} {...t} i={i} />
           ))}
         </div>
       </div>
